@@ -219,8 +219,8 @@ We note that $C_p\times p$, $R_{xx}$, i.e. the auto-covariance and the auto-corr
 
 \subsection{Properties of Hermitian Matrices}
 
-\begin{enumerate}
-\item The Eigenvalues $\lambda_i$ are real and the eigenvectors are orthogonal.
+
+The Eigenvalues $\lambda_i$ are real and the eigenvectors are orthogonal.
 
 Let $\mathbf{T}_{P\times P}$ be a Hermitian Matrix and let $\mathbf x$ be the eigenvector for eigenvalue $\lambda$.
 \indent Then $\mathbf{T}\mathbf{x} = \lambda \mathbf{x}$
@@ -242,7 +242,7 @@ Take Hermitian of (1) and multiply by $\mathbf{x_2}$
 (\lambda_2 - \lambda_1)&\mathbf{x_1}^H\mathbf{x_2} = 0
 \end{align*}
 
-\indent But $(\lambda_2 \neq \lambda_1) \Rightarrow \mathbf{x_1}^H\mathbf{x_2}=0$ \\
+But $(\lambda_2 \neq \lambda_1) \Rightarrow \mathbf{x_1}^H\mathbf{x_2}=0$ \\
 Hence the eigenvectors are orthogonal.
 
 Say $\lambda_1\neq\lambda_2\neq\lambda_3\neq\cdots\neq\lambda_p$ with eigenvectors $\mathbf{e_1},\mathbf{e_2},\cdots,\mathbf{e_p}$
@@ -263,9 +263,14 @@ then $\mathbf{T}\mathbf{E} = \mathbf{E}\mathbf{D}$\\ multiply by $\mathbf{E}^H$ 
 \\\\Note that det(t) = det(n)
 \\\\A matrix $\mathbf{A}_{n\times n}$ is said to be \textbf{positive semi definite} if for any non zero vector, $x\neq\theta_n$
 $$\mathbf{x}^HA\mathbf{x}\geq 0$$
+We note that covariance and correlation matrices are at least PSD.
 
-
-\end{enumerate}
+\subsection{Orthogonality Principle}
+Orthogonality Principle states that the error e[n] between the desired signal d[n] and the estimator signal is minimum in the least square sense if the error e[n] is orthogonal to x[n], i.e. $$E[\mathbf{x}[n]\mathbf{e}[n]]=0$$
+Even using this condition, we arrive at the same equation for optimum filter weights
+$$h_opt = R^{-1}P$$
+R- auto-correlation matrix\\
+P- cross correlation matrix
 
 \section{Adaptive Filters}
 
@@ -299,7 +304,144 @@ Now suppose the frequency of oscillation $\omega_c$ is time variant. In this cas
 
 
 An adaptive line enhancer (ALE) is based on the straightforward concept of linear prediction. A nearly-periodic signal can be perfectly predicted using linear combinations of its past samples, whereas a non-periodic signal cannot. Now in terms of adaptive filter parameters x(n) and d(n), a delayed version of the measured signal $s(n-D)$ is used as the reference input signal x(n) to the adaptive filter, and the desired response signal d(n) is made equal to s(n). The parameters to choose in such a system are the signal delay D and the filter length L used in the adaptive linear estimate. The amount of delay depends on the amount of correlation in the signal of interest. Since we don't have this signal(this is what we are estimating in this application), a value of D is chosen arbitrarily and varied later.
+\section{Beamforming}
+Consider a two-element antenna array. The
+array consists of two omnidirectional (equally sensitive to all directions) antennas A and
+B, as shown in Figure 4. A desired signal $s(n) = \alpha(n) cos(n\omega_o + \phi_1)$ arrives in the
+direction perpendicular to the line connecting A and B. An interferer (jammer) signal
+$v(n) = \beta(n) cos(n\omega_o+ \phi_2)$ arrives at an angle $\theta_o$ relative to s(n). The signal sequences
+s(n) and v(n) are assumed to be narrow-band processes with random phases $\phi_1$ and $\phi_2$,
+respectively. It is also assumed that the random amplitudes $\alpha$(n) and $\beta$(n) are zero-mean
+and uncorrelated with each other. The two omnis are separated by a distance of l = $\lambda_c$/2
+meters, where $\lambda_c$ is the wavelength associated with the continuous time carrier frequency
+$$\omega_c = \dfrac{\omega_o}{T}$$
 
+
+with T being the sampling period. The coefficients, h0 and h1, of the beamformer are
+adjusted, so that the output error, e(n), is minimized in the mean-square sense.
+The adaptive beamformer of below figure is characterized by the
+following signal sequences:
+\begin{enumerate}
+\item Primary input
+$$d(n) = \alpha(n) cos(n\omega_o + \phi_1) + \beta(n) cos(n\omega_o + \phi_2 − \phi_o) $$
+
+\item Reference tap-input vector
+\[
+\mathbf{x(n)}=
+  \begin{bmatrix}
+    x(n) \\
+    \overline{x}(n) \\
+  \end{bmatrix}
+   =
+  \begin{bmatrix}
+    \ \alpha(n) cos(n\omega_o + \phi_1) + \beta(n) cos(n\omega_o + \phi_2) \\
+    \alpha(n) sin(n\omega_o + \phi_1) + \beta(n) sin(n\omega_o + \phi_2)\\
+   
+  \end{bmatrix}
+\]
+
+\end{enumerate}
+
+The phase shift $\phi_o$ is introduced because of the difference between the arrival time of the
+jammer at A and B. It is given by
+$$\phi_o= \dfrac{l sin \theta_o}{c}\omega_c$$ 
+where c is the propagation speed. Replacing l with $\lambda$c/2 in above equation and noting that
+$\omega_c / c = 2\pi/ \lambda_c$, we obtain
+$$\phi_o = \pi sin \theta_o$$
+We note that, as expected, $\phi_o$ is independent of the sampling period T. It depends only
+on the angle of arrival of the jammer signal, $\theta_o$.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.5\textwidth]{antenna_array.png}
+\caption{\label{fig:antenna_array}A two-element antenna array.}
+\end{figure}
+
+The beamformer coefficients, h0 and h1, are selected (adapted), so that the difference
+$$e(n) = d(n) − h^Tx(n)$$
+where $h = [h0 h1]^T$, is minimized in the mean-square sense. The error signal e(n) is the
+beamformer output.
+For a given set of the beamformer coefficients w0 and w1 and a signal arriving at an
+angle $\theta$, the array power gain, $G(\theta)$, is defined as the ratio of the signal power in the
+output e(n) to the signal power at one of the omnis. Assuming that a narrow-band signal
+$\gamma (n) cos n\omega_o$ is arriving at an angle $\theta$,
+\begin{align*}
+e(n) &= \gamma (n)[cos(n\omega_o − \pi sin \theta) − h0 cos n\omega_o − h1 sin n\omega_o]\\
+&= \gamma (n)[(cos(\pi sin \theta) − h_0) cos n\omega_o + (sin(\pi sin \theta) − h_1) sin n\omega_0]\\
+&= a(\theta)\gamma (n) sin(n\omega_o+ \varphi(\theta))
+\end{align*}
+
+where
+$$a(\theta) = (cos(\pi sin \theta) − h_0)2 + (sin(\pi sin \theta) − h_1)2$$
+and
+$$\varphi(\theta) = tan^{−1}(\frac{cos(\pi sin \theta) − h_0}{sin(\pi sin \theta) − h_1}) $$
+
+
+Using these, we get
+$$G(\theta) = a^2(\theta) = (cos(\pi sin \theta) − h_0)2 + (sin(\pi sin \theta) − h_1)2$$
+$G(\theta)$ when plotted against the angle of arrival of the received signal is called directivity
+pattern of the array (beamformer).
+
+
+
+\section{LMS Algorithm: Steepest Descent Technique}
+$E^{2}=E[ |e[n]|^2]$ is a quadratic function of filter weights. Hence it contains only one extrma. We find the minimum of the mean square using the steepest descent technique as follows
+$$ h[i+1] = h[i] - \mu\nabla E^{2} \Big \rangle _{h=h[i]}$$
+Where $\mu$ is step size and $\nabla$ is gradient. 
+We know that $\nabla E^{2}=[2Rh-2p]\Big \rangle _{w=w[i]}$
+$$  h[i+1] = h[i] + \mu[2Rh-2p]\Big \rangle _{h=h[i]}$$
+Suppose we replace $R=E[x[n]x^T[n]]$ by a very crude estimate $R=x[n]x^T[n]$ and P by $x[n]d[n]$.
+Even though our estimates are really crude we will prove that the algorithm works even with such estimates.
+In the above equation we need to know R and P; and hence it can only be used for offline applications. To derive an algorithm that works in realtime, we do the following: 
+The previous weights in the iterative procedure will be convolved with $x[n-1],x[n-2],...$ and will contain information about a large number of $x[i]'s$
+Therefore the equation becomes 
+$$  h[n+1] = h[n] + \mu[n]e[n] $$
+This algorithm is called the LMS algorithm.
+Suppose we have exact P and R, $h[n+1]$ will converge directly to $h_{opt}$.
+But we have crude estimate of P and R and hence $h[n+1]$ doesnt converge exactly to $h_{opt}$.
+
+Convergence in mean of LMS algorithm
+
+Consider $\Delta[n]= W[n]W_opt$ weight error vector
+$$  w[i+1] = w[i] + \mu ex[n]e[n] $$
+Subtracting $W_{opt}$ from both sides,
+$$  \nabla[n+1] = \nabla[n] + \mu x[n]e[n] $$
+But $ e[n]=d[n]-y[n] = d[n]-x^T[n]W[n]$
+$$  w[n+1] = w[n] + \mu ex[n][d[n]-x^T[n](W_{opt}+\nabla[n])]$$
+Say $E[\nabla(n)]=U[n]$
+Taking expectation on both sides :
+$$  v[n+1] = v[n] + \mu [P -R_{opt}]-\mu E[x[n]x^T[n]\nabla[n]]$$
+We know that $W_{opt}=R^{-1}P \Rightarrow RW_{opt}=P$
+$$  v[n+1] = v[n] -\mu E[x[n]x^T[n]\nabla[n]]$$
+
+We invoke independence assumptions - 
+Assume $w[n]$ is statistically independent of $x[n] and d[n]$
+\begin{align*}  v[n+1] &= v[n] -\mu E[x[n]x^H[n]]e[\nabla[n]] \\
+  v[n+1] &= v[n] -\mu Rv[n] \\
+  v[n+1] &= v[n] -\mu E[x[n]x^T[n]\nabla[n]] \end{align*}
+R is Hermitian positive semi-definite.
+$R=TDT^H$
+\begin{align*}  v[n+1] &= v[n](TIT^{H} - \mu TDT^{H})
+\\  v[n+1] &= T(I-\mu D)T^Hv[n]
+\\  u[n+1] &= T(I-\mu D)u[n]\end{align*}
+Normalization of a vector doesnt change when multiplied by a unitary matrix
+If we can show $\lim_{n\to\infty}||u[n]||=0$ ; then $w[n]$ will converge to $W_{opt}$ in the mean.
+$[I-\mu D]$ is a diagonal matrix
+$$||u[n]||^2=\sum_{i=0}^{N}|1-\mu\lambda_i|^2|u_i[n]|^2 $$
+We can choose $\mu$ such that $1-\mu\lambda_i < 1$
+$$||u[n]||^2 < ||u[n+1]||^2$$
+Normalization of $u[n]$ is monotonically decreasing 
+But $||u[n]||^2\geq 0$
+Hence $\lim_{n\to\infty}||u[n]||=0$
+Choice of u is non-negative
+$\lambda_i's$ are positive as R is Power spectral density.
+We choose $\mu$ such that
+\begin{align*} 0<(1-\lambda_i \mu)^2<1 
+\\ -1<(1-\lambda_i\mu)<1
+\\ 0<\mu<2/\lambda_{max}\end{align*}
+We know that $R=TDT^H$
+$$Trace(R)=Trace(D)$$
+$$\sum \geq \lambda_max$$
 
 
 
