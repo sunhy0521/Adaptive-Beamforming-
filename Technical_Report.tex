@@ -164,24 +164,26 @@ Let X(t) and Y(t) be two random processes characterized by joint PDF $P(x_{t1}, 
 \subsection{Power Density Spectrum}
 
 A stationary random process is an infinite energy signal, and hence does not have a Fourier transform. Its spectral characteristic is obtained from the Fourier Transform of it auto-correlation according to Wiener-Khinchin theorem.
-\\ \textbf{State Theorem: } $$ \Gamma_{xx}(F) = \int_{-\infty}^{\infty} r_{xx}(\tau)e^{-j2\pi F\tau} d\tau$$
-$$ r_{xx}(\tau) = \int_{-\infty}^{\infty} \Gamma_{xx}(F)e^{-j2\pi F\tau} dF $$
-$$ 				= \int_{-\infty}^{\infty} \Gamma_{xx}(F) dF $$
-$$ 				= E(x^2_t)  \geq 0 $$
-$r_{xx}(0)$ is equal to average power of the random process 
-
-
+\\ \textbf{State Theorem: }
+\begin{align*}
+ \Gamma_{xx}(F) &= \int_{-\infty}^{\infty} r_{xx}(\tau)e^{-j2\pi F\tau} d\tau\\
+ r_{xx}(\tau) &= \int_{-\infty}^{\infty} \Gamma_{xx}(F)e^{-j2\pi F\tau} dF \\
+ 				&= \int_{-\infty}^{\infty} \Gamma_{xx}(F) dF \\
+				&= E(x^2_t)  \geq 0 \\
+ \end{align*}
+$r_{xx}$(0) is equal to average power of the random process
 
 \subsection{Discrete Time Random Signals}
 We model a discrete time random signal using a discrete time random process which is atleast wide sense stationary (possible with zero mean).
-Consider a random signal x[n] of length N, we define its auto-correlation as 
-$$ r_{xx}(l) = \sum_{n=0}^{N} x[n]x[n-l] $$
-$$ r_{xx}(m) = E(x[n]x*[n-m]) $$
-
+Consider a random signal x[n] of length N, we define its auto-correlation as
+\begin{align*}
+ r_{xx}(l) &= \sum_{n=0}^{N} x[n]x[n-l] \\
+ r_{xx}(m) &= E(x[n]x*[n-m]) 
+\end{align*}
 \subsection{Vector Space Treatment of Random Variables}
 Consider a vector of random variables x, with mean $\mu_x$
 \[
-\pmb{x}=
+\mathbf{x}=
   \begin{bmatrix}
     x_1 \\
     x_2 \\
@@ -189,7 +191,7 @@ Consider a vector of random variables x, with mean $\mu_x$
     \vdots \\
     x_n
   \end{bmatrix}
-  \indent\indent \pmb{\mu_x} =
+  \indent\indent \mathbf{\mu_x} =
   \begin{bmatrix}
     \mu_{x1} \\
     \mu_{x2} \\
@@ -198,11 +200,11 @@ Consider a vector of random variables x, with mean $\mu_x$
     \mu_{xn}
   \end{bmatrix}
 \]
-We define the auto-covariance matrix $C_{p\times p}$ as $$ C_{p\times p} = E[(\pmb{x}-\pmb{\mu_x})(\pmb{x}-\pmb{\mu_x})^H]$$
+We define the auto-covariance matrix $C_{p\times p}$ as $$ C_{p\times p} = E[(\mathbf{x}-\mathbf{\mu_x})(\mathbf{x}-\mathbf{\mu_x})^H]$$
 where $a^H$ is the \textbf{Hermitian} of a. Consider a random process x
 
 Consider a random process \[
-\pmb{x}=
+\mathbf{x}=
   \begin{bmatrix}
     x[n] \\
     x[n-1] \\
@@ -212,13 +214,57 @@ Consider a random process \[
   \end{bmatrix}
 \]
 
-We define the auto-correlation matrix $R_{xx}$ as $$ R_{xx} = E[\pmb{x}\pmb{x^H}]$$ 
-We note that $C_p\times p$, $R_{xx}$, i.e. the auto-covariance and the auto-correlation matrices are Hermitian. Further, $R_{xx}$, the auto-correlation matrix, is \textbf{Hermitian Toeplitz} if $\pmb{x}$ is wide sense stationary.
+We define the auto-correlation matrix $R_{xx}$ as $$ R_{xx} = E[\mathbf{x}\mathbf{x^H}]$$ 
+We note that $C_p\times p$, $R_{xx}$, i.e. the auto-covariance and the auto-correlation matrices are Hermitian. Further, $R_{xx}$, the auto-correlation matrix, is \textbf{Hermitian Toeplitz} if $\mathbf{x}$ is wide sense stationary.
 
 \subsection{Properties of Hermitian Matrices}
 
 \begin{enumerate}
-\item
+\item The Eigenvalues $\lambda_i$ are real and the eigenvectors are orthogonal.
+
+Let $\mathbf{T}_{P\times P}$ be a Hermitian Matrix and let $\mathbf x$ be the eigenvector for eigenvalue $\lambda$.
+\indent Then $\mathbf{T}\mathbf{x} = \lambda \mathbf{x}$
+
+Take Hermitian on both sides and multiply by $\mathbf{x}$
+$$\mathbf{x}^H \mathbf{T}^H \mathbf{x} = \lambda^*\mathbf{x}^H\mathbf{x}$$
+But $\mathbf{T}^H=\mathbf{T}$ and $\mathbf{T}\mathbf{x} = \lambda \mathbf{x}$
+$$\mathbf{x}^H\lambda\mathbf{x} = \lambda^*\mathbf{x}^H\mathbf{x}$$
+\indent $\Longrightarrow \lambda = \lambda^k$ \indent Hence eigenvalues are real.\\
+Consider 
+\begin{align*}
+T\mathbf{x_1} &= \lambda_1\mathbf{x_1}\cdots\cdots\cdots(1) \indent (\lambda_1 \neq \lambda_2) \\
+T\mathbf{x_2} &= \lambda_1\mathbf{x_2}\cdots\cdots\cdots(2)
+\end{align*}
+Take Hermitian of (1) and multiply by $\mathbf{x_2}$
+\begin{align*}
+\mathbf{x_1}^HT\mathbf{x_2} &= \lambda_1\mathbf{x_1}^H\mathbf{x_2}\\
+\mathbf{x_1}^H\lambda_2\mathbf{x_2} &= \lambda_1\mathbf{x_1}^H\mathbf{x_2}\\
+(\lambda_2 - \lambda_1)&\mathbf{x_1}^H\mathbf{x_2} = 0
+\end{align*}
+
+\indent But $(\lambda_2 \neq \lambda_1) \Rightarrow \mathbf{x_1}^H\mathbf{x_2}=0$ \\
+Hence the eigenvectors are orthogonal.
+
+Say $\lambda_1\neq\lambda_2\neq\lambda_3\neq\cdots\neq\lambda_p$ with eigenvectors $\mathbf{e_1},\mathbf{e_2},\cdots,\mathbf{e_p}$
+Eigenvalues of $\mathbf{T}$ are:
+\begin{align*}
+[\mathbf{e_1},\mathbf{e_2},\cdots,\mathbf{e_p}] &= [\lambda_1\mathbf{e_1},\lambda_2\mathbf{e_2},\cdots,\lambda_p\mathbf{e_p}] \\
+\mathbf{T}\mathbf{E}&=\mathbf{E}\mathbf{D}
+\end{align*}
+where $\mathbf{E}$ is the matrix with eigenvectors as columns and $\mathbf{D}$ is the diagonal matrix of eigenvalues.
+Suppose the eigenvectors are normalized,\\\\
+\indent$\mathbf{E}^H\mathbf{E} =\mathbf{T}$ [$\mathbf{E}$ is unitary]\\
+then $\mathbf{T}\mathbf{E} = \mathbf{E}\mathbf{D}$\\ multiply by $\mathbf{E}^H$ \\
+\begin{align*}
+\mathbf{T}\mathbf{E}\mathbf{E}^H &= \mathbf{E}\mathbf{D}\mathbf{E}^H \\
+\mathbf{T}&=\mathbf{E}\mathbf{D}\mathbf{E}^H
+\end{align*}
+-\textbf{Similarity Transform}
+\\\\Note that det(t) = det(n)
+\\\\A matrix $\mathbf{A}_{n\times n}$ is said to be \textbf{positive semi definite} if for any non zero vector, $x\neq\theta_n$
+$$\mathbf{x}^HA\mathbf{x}\geq 0$$
+
+
 \end{enumerate}
 
 \section{Adaptive Filters}
